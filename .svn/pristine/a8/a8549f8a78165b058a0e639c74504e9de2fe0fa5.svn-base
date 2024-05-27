@@ -1,0 +1,33 @@
+package kr.happyjob.study.std.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.happyjob.study.std.dao.SubmittedWorkDao;
+import kr.happyjob.study.std.model.SubmittedWorkVo;
+
+@Service
+public class SubmittedWorkServiceImpl implements SubmittedWorkService {
+	
+	@Autowired
+	SubmittedWorkDao submittedWorkdao;
+
+	@Override
+	public List<SubmittedWorkVo> fHwkList(Map<String, Object> paramMap) throws Exception {
+		return submittedWorkdao.fHwkList(paramMap);
+	}
+
+	@Override
+	public int countHwkList(Map<String, Object> paramMap) throws Exception {
+		return submittedWorkdao.countHwkList(paramMap);
+	}
+
+	@Override
+	public List<SubmittedWorkVo> selectHwkList(Map<String, Object> paramMap) throws Exception {
+		return submittedWorkdao.selectHwkList(paramMap);
+	}
+
+}

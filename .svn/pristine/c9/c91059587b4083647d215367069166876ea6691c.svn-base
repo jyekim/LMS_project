@@ -1,0 +1,21 @@
+package kr.happyjob.study.tut.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.happyjob.study.tut.model.TutorLearningMaterials;
+import kr.happyjob.study.tut.model.TutorProjectDto;
+
+public interface TutorProjectService {
+
+	public List<TutorProjectDto> getTutorProjectList(Map<String, Object> paramMap) throws Exception;
+	public int tutorProjectTotalCount(Map<String, Object> paramMap) throws Exception;
+	public TutorProjectDto getDetailTutorProject(int param) throws Exception;
+	
+	public int insertTutorProject(Map<String, Object> paramMap) throws Exception;
+	
+	public Boolean updateTutorProject(Map<String, Object> paramMap) throws Exception;
+	
+	public Boolean deleteTutorProject(int projectId) throws Exception;
+	
+}

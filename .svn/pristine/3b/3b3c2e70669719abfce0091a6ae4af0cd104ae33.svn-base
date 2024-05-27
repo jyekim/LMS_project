@@ -1,0 +1,274 @@
+package kr.happyjob.study.std.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import kr.happyjob.study.adv.model.AdviceVo;
+import kr.happyjob.study.adv.model.LecInfoVo;
+import kr.happyjob.study.std.model.MyLecInfoVo;
+
+import kr.happyjob.study.adv.service.AdviceService;
+import kr.happyjob.study.std.service.MyLecInfoService;
+
+@Controller
+@RequestMapping("/std/")
+public class MyLecInfoController {
+	
+	@Autowired
+	AdviceService adviceService;
+	
+	@Autowired
+	MyLecInfoService myLecInfoService;
+
+	
+	// Set logger
+	private final Logger logger = LogManager.getLogger(this.getClass());
+
+	// Get class name for logger
+	private final String className = this.getClass().toString();
+	
+	
+	
+	/**
+	 * 나의 수강목록 초기화면
+	 */
+	@RequestMapping("myLectureInfo.do")
+	public String myLectureInfo( Model model, 
+						         @RequestParam Map<String, Object> paramMap, 
+						         HttpServletRequest request,
+						         HttpServletResponse response, 
+						         HttpSession session ) throws Exception {
+		
+		logger.info("+ Start " + className + ".myLectureInfo");
+		logger.info("   - paramMap : " + paramMap);
+		
+		logger.info("+ End " + className + ".myLectureInfo");
+
+		return "std/myLectureInfo";
+	}
+	
+	/**
+	 * 나의 수강목록 목록
+	 */
+	@RequestMapping("myLecList.do")
+	public String myLecList( Model model, 
+						     @RequestParam Map<String, Object> paramMap, 
+						     HttpServletRequest request,
+						     HttpServletResponse response, 
+						     HttpSession session ) throws Exception {
+		
+		logger.info("+ Start " + className + ".myLecList");
+		logger.info("   - paramMap : " + paramMap);
+		
+		// object 타입으로 넘겨 받음 -> String 형변환 -> int 타입으로 변환
+		int currentPage = Integer.valueOf((String)paramMap.get("currentPage"));
+		int pageSize = Integer.valueOf((String)paramMap.get("pageSize"));		
+		int startPos = (currentPage - 1) * pageSize;
+		
+		paramMap.put("startPos", startPos);
+		paramMap.put("pageSize", pageSize);
+		
+		// session 에서 id 가져오기 -> Map 으로 넣기
+		String loginID = (String)session.getAttribute("loginId");
+		paramMap.put("loginID", loginID);		
+		
+		List<MyLecInfoVo> listData = myLecInfoService.myLecList(paramMap);
+		int listCnt = myLecInfoService.myLecListCnt(paramMap);
+		
+		logger.info("listData : " + listData);
+		logger.info("listCnt : " + listCnt);
+		
+		model.addAttribute("listData", listData);
+		model.addAttribute("listCnt", listCnt);		
+		
+		logger.info("+ End " + className + ".myLecList");
+
+		return "std/myLecList";
+	}
+	
+	/**
+	 * 상담 목록
+	 */
+	/*@RequestMapping("advList.do")
+	public String advList( Model model, 
+						   @RequestParam Map<String, Object> paramMap, 
+						   HttpServletRequest request,
+						   HttpServletResponse response, 
+						   HttpSession session ) throws Exception {
+		
+		logger.info("+ Start " + className + ".advList");
+		logger.info("   - paramMap : " + paramMap);
+		
+		// object 타입으로 넘겨 받음 -> String 형변환 -> int 타입으로 변환
+		int currentPage = Integer.valueOf((String)paramMap.get("currentPage"));
+		int pageSize = Integer.valueOf((String)paramMap.get("pageSize"));		
+		int startPos = (currentPage - 1) * pageSize;
+		
+		paramMap.put("startPos", startPos);
+		paramMap.put("pageSize", pageSize);		
+		
+		List<AdviceVo> listData = adviceService.advList(paramMap);
+		int listCnt = adviceService.advListCnt(paramMap);
+		
+		logger.info("listData : " + listData);
+		logger.info("listCnt : " + listCnt);
+		
+		model.addAttribute("listData", listData);
+		model.addAttribute("listCnt", listCnt);
+		
+		logger.info("+ End " + className + ".advList");
+
+		return "adv/advList";
+	}*/
+	
+	/**
+	 * 모달창 강의 목록
+	 */
+	/*@RequestMapping("mlecList.do")
+	public String mlecList( Model model, 
+						   @RequestParam Map<String, Object> paramMap, 
+						   HttpServletRequest request,
+						   HttpServletResponse response, 
+						   HttpSession session ) throws Exception {
+		
+		logger.info("+ Start " + className + ".mlecList");
+		logger.info("   - paramMap : " + paramMap);		
+		
+		List<LecInfoVo> listData = adviceService.lecList(paramMap);
+		int listCnt = adviceService.lecListCnt(paramMap);
+		
+		logger.info("listData : " + listData);
+		logger.info("listCnt : " + listCnt);
+		
+		model.addAttribute("listData", listData);
+		model.addAttribute("listCnt", listCnt);		
+		
+		logger.info("+ End " + className + ".mlecList");
+
+		return "adv/mlecList";
+	}*/
+	
+	/**
+	 * 모달창 학생 목록
+	 */
+	/*@RequestMapping("mlecStdList.do")
+	public String mlecStdList( Model model, 
+						       @RequestParam Map<String, Object> paramMap, 
+						       HttpServletRequest request,
+						       HttpServletResponse response, 
+						       HttpSession session ) throws Exception {
+		
+		logger.info("+ Start " + className + ".mstdList");
+		logger.info("   - paramMap : " + paramMap);
+		
+		List<LecInfoVo> listData = adviceService.lecStdList(paramMap);
+		int listCnt = adviceService.lecStdListCnt(paramMap);
+		
+		logger.info("listData : " + listData);
+		logger.info("listCnt : " + listCnt);
+		
+		model.addAttribute("listData", listData);
+		model.addAttribute("listCnt", listCnt);	
+		
+		logger.info("+ End " + className + ".mstdList");
+
+		return "adv/mlecStdList";
+	}*/
+	
+	/*
+	*//**
+	 * 공지사항 파일 없이 저장
+	 *//*
+	@RequestMapping("noticesave.do")
+	@ResponseBody	// body 에만 담아서 데이터 리턴을 위함
+	public Map<String, Object> noticesave(Model model, @RequestParam Map<String, Object> paramMap, HttpServletRequest request,
+			HttpServletResponse response, HttpSession session) throws Exception {
+		
+		logger.info("+ Start " + className + ".noticesave");
+		logger.info("   - paramMap : " + paramMap);
+		
+		// 반환할 데이터를 담을 Map 객체
+		Map<String, Object> returnmap = new HashMap<>();
+		
+		// JSON 형태로 넘겨준 param 값 가져오기 Object 타입 -> 캐스팅 필요
+		String action = (String)paramMap.get("action");
+		
+		// session 에서 id 가져오기 -> Map 으로 넣기
+		String loginID = (String)session.getAttribute("loginId");
+		paramMap.put("loginID", loginID);
+		
+		// 신규 등록이면
+		int sreturn = 0;
+		String result = "";
+		String resultmsg = "";
+		if("I".equals(action)){
+			sreturn = noticeService.noticesave(paramMap);
+			//System.out.println((String)paramMap.get("ititle"));
+		} else if("U".equals(action)){
+			sreturn = noticeService.noticeupdate(paramMap);
+		} else if("D".equals(action)){
+			sreturn = noticeService.noticedelete(paramMap);
+		}
+		
+		if(sreturn>=0){
+			result = "S";
+			
+			if("D".equals(action))
+				resultmsg = "삭제되었습니다.";
+			else
+				resultmsg = "저장되었습니다.";
+			
+		} else {
+			result = "F";
+			
+			if("D".equals(action))
+				resultmsg = "삭제 실패하였습니다.";
+			else
+				resultmsg = "저장 실패하였습니다.";
+		}
+		
+		returnmap.put("result", result);
+		returnmap.put("resultmsg", resultmsg);
+		
+		logger.info("+ End " + className + ".noticesave");
+		
+		return returnmap;
+	}
+	
+	
+	*//**
+	 * 공지사항 상세 조회
+	 *//*
+	@RequestMapping("noticedtl.do")
+	@ResponseBody	// body 에만 담아서 데이터 리턴을 위함
+	public Map<String, Object> noticedtl(Model model, @RequestParam Map<String, Object> paramMap, HttpServletRequest request,
+			HttpServletResponse response, HttpSession session) throws Exception {
+		
+		logger.info("+ Start " + className + ".noticedtl");
+		logger.info("   - paramMap : " + paramMap);
+		
+		// 반환할 데이터를 담을 Map 객체
+		Map<String, Object> returnmap = new HashMap<>();
+		noticeService.noticehitupdate(paramMap);
+		Noticevo selinfo = noticeService.noticedtl(paramMap);	
+
+		returnmap.put("selinfo", selinfo);
+		
+		logger.info("+ End " + className + ".noticedtl");
+		
+		return returnmap;
+	}*/
+	
+	
+}

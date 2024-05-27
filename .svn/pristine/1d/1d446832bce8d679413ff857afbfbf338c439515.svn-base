@@ -1,0 +1,23 @@
+package kr.happyjob.study.tut.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.happyjob.study.tut.model.TutorLearningMaterials;
+import kr.happyjob.study.tut.model.TutorProjectDto;
+
+public interface TutorProjectDao {
+
+	public List<TutorProjectDto> getTutorProjectList(Map<String, Object> paramMap);
+	
+	public int tutorProjectTotalCount(Map<String, Object> paramMap);
+	
+	public int insertTutorProejct(TutorProjectDto tutorProjectDto);
+	
+	public TutorProjectDto getDetailTutorProject(int param);
+	
+	public int updateTutorProject(Map<String, Object> paramMap);
+	
+	public int deleteTutorProject(int projectId);
+	
+}

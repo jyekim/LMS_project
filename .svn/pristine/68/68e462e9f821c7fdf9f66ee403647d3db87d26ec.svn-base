@@ -1,0 +1,120 @@
+package kr.happyjob.study.std.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.happyjob.study.std.dao.MyLecInfoDao;
+import kr.happyjob.study.std.model.MyLecInfoVo;
+
+@Service
+public class MyLecInfoServiceImpl implements MyLecInfoService {
+
+	// Set logger
+	private final Logger logger = LogManager.getLogger(this.getClass());
+	
+	// Get class name for logger
+	private final String className = this.getClass().toString();
+	
+	@Autowired
+	MyLecInfoDao myLecInfoDao;
+
+	
+	/** 나의 수강목록 조회 */
+	@Override
+	public List<MyLecInfoVo> myLecList(Map<String, Object> paramMap) throws Exception {
+		
+		logger.info("   - paramMap : " + paramMap);
+
+		return myLecInfoDao.myLecList(paramMap);
+	}
+	
+	/** 나의 수강목록 카운트 조회 */
+	@Override
+	public int myLecListCnt(Map<String, Object> paramMap) throws Exception {
+		return myLecInfoDao.myLecListCnt(paramMap);
+	}
+	
+	
+	
+	
+	
+	
+	
+	/** 상담 목록 조회 */
+	/*@Override
+	public List<AdviceVo> advList(Map<String, Object> paramMap) throws Exception {
+		logger.info("   - paramMap : " + paramMap);
+
+		return adviceDao.advList(paramMap);
+	}
+	*/
+	/** 상담 목록 카운트 조회 */
+	/*@Override
+	public int advListCnt(Map<String, Object> paramMap) throws Exception {
+		return adviceDao.advListCnt(paramMap);
+	}*/
+
+	/** 강의 수강 학생 목록 조회 */
+	/*@Override
+	public List<LecInfoVo> lecStdList(Map<String, Object> paramMap) throws Exception {
+		
+		logger.info("   - paramMap : " + paramMap);
+
+		return adviceDao.lecList(paramMap);
+	}*/
+	
+	/** 강의 수강 학생  카운트 조회 */
+/*	@Override
+	public int lecStdListCnt(Map<String, Object> paramMap) throws Exception {
+		return adviceDao.lecStdListCnt(paramMap);
+	}
+*/
+
+	
+	/** 목록 조회 *//*
+	public List<Noticevo> noticelist(Map<String, Object> paramMap) throws Exception {
+		
+		List<Noticevo> listdata = noticeDao.noticelist(paramMap);
+		
+		return listdata;
+	}
+	
+	*//** 카운트 조회 *//*
+	public int noticecnt(Map<String, Object> paramMap) throws Exception {
+		
+		int totalCount = noticeDao.noticecnt(paramMap);
+		
+		return totalCount;
+	}
+	
+	*//** 파일 x 신규 공지 등록 *//*
+	public int noticesave(Map<String, Object> paramMap) throws Exception{
+		return noticeDao.noticesave(paramMap);
+	};
+
+	*//** 파일 x 공지 수정 *//*
+	public int noticeupdate(Map<String, Object> paramMap) throws Exception{
+		return noticeDao.noticeupdate(paramMap);
+	};
+	
+	*//** 조회수 수정 *//*
+	public int noticehitupdate(Map<String, Object> paramMap) throws Exception{
+		return noticeDao.noticehitupdate(paramMap);
+	};
+	
+	*//** 상세 조회 *//*
+	public Noticevo noticedtl(Map<String, Object> paramMap) throws Exception{
+		return noticeDao.noticedtl(paramMap);
+	};
+	
+	*//** 파일 x 공지 삭제 *//*
+	public int noticedelete(Map<String, Object> paramMap) throws Exception{
+		return noticeDao.noticedelete(paramMap);
+	};*/
+	
+}

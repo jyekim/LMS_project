@@ -1,0 +1,90 @@
+package kr.happyjob.study.std.service;
+
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import kr.happyjob.study.common.comnUtils.FileUtilCho;
+import kr.happyjob.study.notice.dao.NoticeDao;
+import kr.happyjob.study.std.dao.SubmittedWorkDao;
+import kr.happyjob.study.std.model.SubmittedWorkVo;
+
+
+@Service
+public class SubmittedWorkServiceImpl implements SubmittedWorkService {
+
+	private final Logger logger = LogManager.getLogger(this.getClass());
+	private final String className = this.getClass().toString();
+	
+	@Autowired
+	SubmittedWorkDao submittedWorkdao;
+	
+	@Value("${fileUpload.rootPath}") //happyjob.properties에서 기본적으로 설정된거 있는데 그 정보를 불러온다는거.
+	private String rootPath;
+	
+	@Value("${fileUpload.noticePath}")
+	private String itemPath;
+	
+	@Value("${fileUpload.virtualRootPath}")
+	private String virtualRootPath;	
+	
+	
+	/** 리스트출력*/
+	@Override
+	public List<SubmittedWorkVo> submitList(Map<String, Object> paramMap) throws Exception {
+		return submittedWorkdao.submitList(paramMap);
+	}
+
+	/** 카운트 조회 */
+	public int submitcnt(Map<String, Object> paramMap) throws Exception {
+		int totalCount = submittedWorkdao.submitcnt(paramMap);
+		return totalCount;
+	}
+
+	/*과제등록*/
+	public int submitSave(Map<String, Object> paramMap,HttpServletRequest request) throws Exception{
+		//1. 업로드된 파일 정보
+		MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)request;
+											//.separator : OS에서 사용하는 이름 구분자
+		String itemFilePath = itemPath +File.separator;
+		
+		System.out.println("만들어진 주소 > "+itemFilePath);
+		/*System.out.println("paramMap: "+paramMap); //{notice_tit=ㅋㅋㅋ, notice_con=ㅋㅋㅋ, empty=empty}
+		System.out.println("HttpServletRequest request: "+request); //org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest@76dea1b2
+		System.out.println("MultipartHttpServletRequest: "+multipartHttpServletRequest);//org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest@76dea1b2
+		System.out.println("itemPath: "+itemPath);//notice
+		System.out.println("itemFilePath: "+itemFilePath);//itemFilePath: notice\
+		System.out.println("rootPath: "+rootPath);//W:\FileRepository
+		System.out.println("virtualRootPath: "+virtualRootPath);// /serverfile
+*/
+		FileUtilCho fileup = new FileUtilCho(multipartHttpServletRequest,rootPath,virtualRootPath,itemFilePath);
+		
+
+		Map<String, Object> fileinfo = fileup.uploadFiles();
+		
+		System.out.println("fileinfo: "+ fileinfo);
+		
+		System.out.println("파일이름있나여??????????????????"+fileinfo.get("file_nm"));
+		paramMap.put("fileinfo", fileinfo);
+		return submittedWorkdao.submitSave(paramMap);
+	};
+	
+	
+/*
+	@Override
+	public List<SubmittedWorkVo> selectHwkList(Map<String, Object> paramMap) throws Exception {
+		return submittedWorkdao.selectHwkList(paramMap);
+	}
+
+*/
+	
+}

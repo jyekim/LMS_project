@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happyjob.study.std.dao.SubmittedWorkDao">
+	
+	<!-- 내가 듣는 강의 중 과제가 있는 과제물만 출력 -->
+	<select id="submitList" resultType="kr.happyjob.study.std.model.SubmittedWorkVo">
+		SELECT li.lec_id as lec_id
+		      ,lei.lec_name as lec_name
+		      ,hmk.hwk_id as hwk_id
+		      ,hmk.hwk_name as hwk_name
+		 FROM tb_lecstd_info li
+		       INNER JOIN tb_lec_info lei on lei.lec_id = li.lec_id
+		       LEFT OUTER JOIN tb_hmk hmk on hmk.lec_id = li.lec_id 
+		 where li.std_id=#{loginID}
+		   and li.apv_yn = 'y'
+		   and exists(  
+		                select 1
+		                  from tb_hmk bk
+		                 where bk.lec_id = li.lec_id
+		             )
+	</select>
+	
+	<!-- 총 게시글 -->
+	<select id="submitcnt" resultType="int">
+		/*kr.happyjob.study.notice.dao.NoticeDao.submitcnt*/
+		
+		SELECT COUNT(*)
+		 FROM tb_lecstd_info li
+		       INNER JOIN tb_lec_info lei on lei.lec_id = li.lec_id
+		       LEFT OUTER JOIN tb_hmk hmk on hmk.lec_id = li.lec_id 
+		 where li.std_id='wont92'
+		   and li.apv_yn = 'y'
+		   and exists(  
+		                select 1
+		                  from tb_hmk bk
+		                 where bk.lec_id = li.lec_id
+		             )
+	</select>	
+	
+	
+	
+	
+	
+	<!-- 과제등록 -->
+	<insert id="noticeSave">
+		/*kr.happyjob.study.notice.dao.NoticeDao.submitSave*/
+
+		<if	test="fileinfo.file_nm!=null">
+				insert into tb_adm_notice 
+					(	
+						 loginID		
+						, notice_tit	
+						, notice_con	
+						, regdate		
+						, hit	
+						,filename
+						,physicalpath
+						,logicalpath
+						,filesize
+						,fileext
+						,file_yn
+					) values (
+						 #{loginID}
+						, #{notice_tit}	
+						, #{notice_con}	
+						, now()		
+						, 0
+						, #{fileinfo.file_nm} 	
+						, #{fileinfo.file_loc}	
+						, #{fileinfo.vrfile_loc} 	
+						, #{fileinfo.file_size} 	
+						, #{fileinfo.fileExtension} 
+						, 'y'	
+					)
+		</if>
+		<if test="fileinfo.file_nm==null">
+		insert into tb_adm_notice 
+					(	
+						 loginID		
+						, notice_tit	
+						, notice_con	
+						, regdate		
+						, hit	
+						,filename
+						,physicalpath
+						,logicalpath
+						,filesize
+						,fileext
+						,file_yn
+					) values (
+						 #{loginID}
+						, #{notice_tit}	
+						, #{notice_con}	
+						, now()		
+						, 0
+						, #{fileinfo.file_nm} 	
+						, #{fileinfo.file_loc}	
+						, #{fileinfo.vrfile_loc} 	
+						, #{fileinfo.file_size} 	
+						, #{fileinfo.fileExtension} 
+						, 'n'	
+					)
+		
+		</if>				
+		</insert>	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 과제 목록 조회 -->
+	<select id="fHwkList" resultType="kr.happyjob.study.std.model.SubmittedWorkVo">
+		SELECT h.hwk_id, 
+			   h.hwk_name,
+			   h.lec_id, 
+		       i.lec_name,
+		       i.tutor_id,
+		       u.name,
+		       h.start,
+		       h.dead,
+		       h.hwk_fname,
+		       h.hwk_url,
+		       hs.submit_date
+		  FROM tb_hmk h 
+    INNER JOIN tb_lec_info i
+			ON h.lec_id = i.lec_id
+    INNER JOIN tb_userinfo u
+			ON u.loginID = i.tutor_id
+	INNER JOIN tb_lecstd_info s
+			ON s.lec_id = i.lec_id
+	 LEFT JOIN tb_hwk_submit hs
+			ON h.hwk_id = hs.hwk_id
+		 WHERE s.std_id = #{loginID}  
+	  ORDER BY hwk_id
+		 LIMIT #{pageIndex}, #{pageSize}
+	</select>
+	
+	<!-- 과제 목록 수 조회 -->
+	<select id="countHwkList" resultType="int">
+		SELECT count(*)
+		  FROM tb_hmk h 
+    INNER JOIN tb_lec_info i
+			ON h.lec_id = i.lec_id
+    INNER JOIN tb_userinfo u
+			ON u.loginID = i.tutor_id
+	INNER JOIN tb_lecstd_info s
+			ON s.lec_id = i.lec_id
+	 LEFT JOIN tb_hwk_submit hs
+			ON h.hwk_id = hs.hwk_id
+		 WHERE s.std_id = #{loginID}   
+	</select>
+	
+	<!-- 과제 단건 조회 -->
+	<select id="selectHwkList" resultType="kr.happyjob.study.std.model.SubmittedWorkVo">
+		SELECT h.hwk_name,
+			   h.hwk_con,
+			   i.lec_id,
+			   i.lec_name,
+		       i.tutor_id,
+		       u.name,
+		       hs.submit_con,
+		       hs.submit_fname,
+		       hs.submit_url,
+		       hs.submit_fsize,
+		       hs.submit_date
+		  FROM tb_lec_info i
+     LEFT JOIN tb_hmk h
+		    ON h.lec_id = i.lec_id
+	 LEFT JOIN tb_hwk_submit hs
+		    ON h.hwk_id = hs.hwk_id
+     LEFT JOIN tb_userinfo u
+		    ON u.loginID = i.tutor_id
+		 WHERE h.hwk_id = #{hwk_id};
+	</select>
+</mapper>

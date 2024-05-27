@@ -1,0 +1,101 @@
+package kr.happyjob.study.std.model;
+
+public class SubmittedWorkVo {
+	private int hwk_id;
+	private String hwk_name;
+	private int lec_id;
+	private String lec_name;
+	private String tutor_id;
+	private String name;
+	private String start;
+	private String dead;
+	private String hwk_fname;
+	private String hwk_url;
+	private String hwk_con;
+	private String loginID;
+	private String submit_date;
+	
+	public int getHwk_id() {
+		return hwk_id;
+	}
+	public void setHwk_id(int hwk_id) {
+		this.hwk_id = hwk_id;
+	}
+	public String getHwk_name() {
+		return hwk_name;
+	}
+	public void setHwk_name(String hwk_name) {
+		this.hwk_name = hwk_name;
+	}
+	public int getLec_id() {
+		return lec_id;
+	}
+	public void setLec_id(int lec_id) {
+		this.lec_id = lec_id;
+	}
+	public String getLec_name() {
+		return lec_name;
+	}
+	public void setLec_name(String lec_name) {
+		this.lec_name = lec_name;
+	}
+	public String getTutor_id() {
+		return tutor_id;
+	}
+	public void setTutor_id(String tutor_id) {
+		this.tutor_id = tutor_id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getStart() {
+		return start;
+	}
+	public void setStart(String start) {
+		this.start = start;
+	}
+	public String getDead() {
+		return dead;
+	}
+	public void setDead(String dead) {
+		this.dead = dead;
+	}
+	public String getHwk_fname() {
+		return hwk_fname;
+	}
+	public void setHwk_fname(String hwk_fname) {
+		this.hwk_fname = hwk_fname;
+	}
+	public String getHwk_url() {
+		return hwk_url;
+	}
+	public void setHwk_url(String hwk_url) {
+		this.hwk_url = hwk_url;
+	}
+	public String getLoginID() {
+		return loginID;
+	}
+	public void setLoginID(String loginID) {
+		this.loginID = loginID;
+	}
+	public String getSubmit_date() {
+		return submit_date;
+	}
+	public void setSubmit_date(String submit_date) {
+		this.submit_date = submit_date;
+	}
+	public String getHwk_con() {
+		return hwk_con;
+	}
+	public void setHwk_con(String hwk_con) {
+		this.hwk_con = hwk_con;
+	}
+	
+	
+	
+	
+
+}
